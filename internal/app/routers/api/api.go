@@ -1,11 +1,11 @@
 package api
 
 import (
+	"github.com/casbin/casbin/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/westfly/gin-admin/internal/app/middleware"
 	"github.com/westfly/gin-admin/internal/app/routers/api/ctl"
 	"github.com/westfly/gin-admin/pkg/auth"
-	"github.com/casbin/casbin/v2"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
 )
 
@@ -24,6 +24,7 @@ func RegisterRouter(app *gin.Engine, container *dig.Container) error {
 		cMenu *ctl.Menu,
 		cRole *ctl.Role,
 		cUser *ctl.User,
+		cAreaQuery *ctl.AreaQuery,
 	) error {
 
 		g := app.Group("/api")
@@ -112,6 +113,17 @@ func RegisterRouter(app *gin.Engine, container *dig.Container) error {
 				gUser.PATCH(":id/enable", cUser.Enable)
 				gUser.PATCH(":id/disable", cUser.Disable)
 			}
+
+			// 注册/api/v1/area-queries
+			gAreaQuery := v1.Group("area-queries")
+			{
+				gAreaQuery.GET("", cAreaQuery.Query)
+				gAreaQuery.GET(":id", cAreaQuery.Get)
+				gAreaQuery.POST("", cAreaQuery.Create)
+				gAreaQuery.PUT(":id", cAreaQuery.Update)
+				gAreaQuery.DELETE(":id", cAreaQuery.Delete)
+			}
+
 		}
 
 		return nil

@@ -3,11 +3,11 @@ package gorm
 import (
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/westfly/gin-admin/internal/app/config"
 	"github.com/westfly/gin-admin/internal/app/model"
 	"github.com/westfly/gin-admin/internal/app/model/impl/gorm/internal/entity"
 	imodel "github.com/westfly/gin-admin/internal/app/model/impl/gorm/internal/model"
-	"github.com/jinzhu/gorm"
 	"go.uber.org/dig"
 
 	// gorm存储注入
@@ -68,6 +68,7 @@ func AutoMigrate(db *gorm.DB) error {
 		new(entity.Menu),
 		new(entity.MenuAction),
 		new(entity.MenuResource),
+		new(entity.AreaQuery),
 	).Error
 }
 
@@ -88,5 +89,7 @@ func Inject(container *dig.Container) error {
 	_ = container.Provide(func(m *imodel.Role) model.IRole { return m })
 	_ = container.Provide(imodel.NewUser)
 	_ = container.Provide(func(m *imodel.User) model.IUser { return m })
+	_ = container.Provide(imodel.NewAreaQuery)
+	_ = container.Provide(func(m *imodel.AreaQuery) model.IAreaQuery { return m })
 	return nil
 }
